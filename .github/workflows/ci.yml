@@ -8,7 +8,7 @@ on:
 
 
 jobs:
-  build_aritfact:
+  build_artifact:
     runs-on: self-hosted 
 
     steps:
