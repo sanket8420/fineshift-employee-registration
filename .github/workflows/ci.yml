@@ -1,0 +1,61 @@
+name: Workflow for employee registration project 
+
+on:
+  push: 
+    branches: [main]
+  pull:
+    branches: [main]
+
+env:
+
+jobs:
+  build_aritfact:
+    runs-on: self-hosted 
+
+    steps:
+      - name: checkout source code 
+        uses: actions/checkout@v4
+      - name: setting up java
+        uses: actions
+      - name: Build Maven Application
+        run: |
+          echo "======================================"
+          echo "BUILDING MAVEN APPLICATION"
+          echo "======================================"
+
+          mvn clean package
+
+          echo "======================================"
+          echo "BUILD SUCCESSFUL"
+          echo "======================================"
+
+      - name: Upload WAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-war-${{ github.sha }}
+          path: target/*.war
+          retention-days: 1
+  
+
+  test:
+    runs-on: self-hosted
+    needs: build_artifact
+
+    steps:
+      - name: testing 
+        run: mvn test
+
+  deployment:
+    runs-on: self-hosted
+    
+    steps:
+      - name: deploying 
+        run: 
+         - echo "WAR file:"
+         - ls -lh target/*.war
+
+         - echo "Copying WAR to Tomcat..."
+         - cp target/*.war /opt/tomcat/webapps/
+
+
+
