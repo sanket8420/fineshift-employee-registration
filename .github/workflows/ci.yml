@@ -49,12 +49,12 @@ jobs:
     
     steps:
       - name: deploying 
-        run: 
-         - echo "WAR file:"
-         - ls -lh target/*.war
+        run: | 
+          echo "WAR file:"
+          ls -lh target/*.war
 
-         - echo "Copying WAR to Tomcat..."
-         - cp target/*.war /opt/tomcat/webapps/
+          echo "Copying WAR to Tomcat..."
+          cp target/*.war /opt/tomcat/webapps/
 
 
 
