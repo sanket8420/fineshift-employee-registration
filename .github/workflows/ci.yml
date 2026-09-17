@@ -59,7 +59,7 @@ jobs:
           ls -lh target/*.war
 
           echo "Copying WAR to Tomcat..."
-          cp target/*.war /opt/tomcat/webapps/
+          sudo cp target/*.war /var/lib/tomcat10/webapps/
 
 
 
