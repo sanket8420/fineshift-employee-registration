@@ -15,7 +15,11 @@ jobs:
       - name: checkout source code 
         uses: actions/checkout@v4
       - name: setting up java
-        uses: actions
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
       - name: Build Maven Application
         run: |
           echo "======================================"
