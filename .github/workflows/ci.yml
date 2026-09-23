@@ -1,4 +1,4 @@
-name: Workflow for employee registration project 
+name: Workflow for employee registration project demo
 
 on:
   push: 
