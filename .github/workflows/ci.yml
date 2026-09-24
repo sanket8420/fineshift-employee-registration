@@ -55,5 +55,5 @@ jobs:
       - name: Deploy to Tomcat
         run: |
           ls -lh app/*.war
-          sudo cp app/*.war /var/lib/tomcat10/webapps/studentapp-2.2.0-SNAPSHOT/
+          sudo cp app/*.war /var/lib/tomcat10/webapps/
           sudo systemctl restart tomcat10
