@@ -1,18 +1,16 @@
 name: Workflow for employee registration project demo
 
 on:
-  push: 
+  push:
     branches: [main]
   pull_request:
     branches: [main]
 
-
 jobs:
   build_artifact:
-    runs-on: self-hosted 
-
+    runs-on: self-hosted
     steps:
-      - name: checkout source code 
+      - name: checkout source code
         uses: actions/checkout@v4
       - name: setting up java
         uses: actions/setup-java@v4
@@ -21,52 +19,41 @@ jobs:
           java-version: "17"
           cache: maven
       - name: Build Maven Application
-        run: |
-          echo "======================================"
-          echo "BUILDING MAVEN APPLICATION"
-          echo "======================================"
-
-          mvn clean package
-
-          echo "======================================"
-          echo "BUILD SUCCESSFUL"
-          echo "======================================"
-
-  Upload-artifact:
-    runs-on: self-hosted
-    needs: build_artifact
-    
-    steps:
-        
+        run: mvn clean package -DskipTests
       - name: Upload WAR artifact
         uses: actions/upload-artifact@v4
         with:
-         name: maven-war-${{ github.sha }}
-         path: target/*.war
-         retention-days: 1
-  
+          name: maven-war-${{ github.sha }}
+          path: target/*.war
+          retention-days: 1
 
   test:
     runs-on: self-hosted
     needs: build_artifact
-
     steps:
-      - name: testing 
+      - name: checkout source code
+        uses: actions/checkout@v4
+      - name: setting up java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      - name: Run tests
         run: mvn test
 
   deployment:
     runs-on: self-hosted
-    needs: test
-    
+    needs: [build_artifact, test]
     steps:
-      - name: deploying 
-        run: | 
-          echo "WAR file:"
-          ls -lh target/*.war
+      - name: Download WAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: maven-war-${{ github.sha }}
+          path: app
 
-          echo "Copying WAR to Tomcat..."
-          sudo cp target/*.war /var/lib/tomcat10/webapps/
+      - name: Deploy to Tomcat
+        run: |
+          ls -lh app/*.war
+          sudo cp app/*.war /var/lib/tomcat10/webapps/
           sudo systemctl restart tomcat10
-
-
-
