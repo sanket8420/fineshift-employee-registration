@@ -66,6 +66,7 @@ jobs:
 
           echo "Copying WAR to Tomcat..."
           sudo cp target/*.war /var/lib/tomcat10/webapps/
+          sudo systemctl restart tomcat10
 
 
 
