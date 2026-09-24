@@ -25,7 +25,7 @@ div.ex {
 }
 </style>
 <body>
-	<h1>Employee Registration Form - Fineshift Baner</h1>
+	<h1>Employee Registration Form - Fineshift Software PVT Limited Baner</h1>
 	<div class="ex">
 		<form action="registrationController" method="post">
 			<table style="with: 50%">
