@@ -34,7 +34,7 @@ jobs:
 
   Upload-artifact:
     runs-on: self-hosted
-    needs: build-artifact
+    needs: build_artifact
     
     steps:
         
