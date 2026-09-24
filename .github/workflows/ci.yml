@@ -1,23 +1,35 @@
-name: Workflow for employee registration project demo
+name: Employee registration CI/CD
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - dev
+      - UAT
 
 jobs:
   build_artifact:
+    # Build on main so deployment has a WAR to deploy.
+    # Also build on dev and UAT.
+    if: ${{ github.ref == 'refs/heads/main' ||
+      github.ref == 'refs/heads/dev' ||
+      github.ref == 'refs/heads/UAT' }}
     runs-on: self-hosted
+
     steps:
-      - name: checkout source code
+      - name: Checkout source code
         uses: actions/checkout@v4
-      - name: setting up java
+
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
           cache: maven
-      - name: Build Maven Application
+
+      - name: Build Maven application
         run: mvn clean package -DskipTests
+
       - name: Upload WAR artifact
         uses: actions/upload-artifact@v4
         with:
@@ -26,26 +38,32 @@ jobs:
           retention-days: 1
 
   test:
+    # Run tests only on dev and UAT.
+    if: ${{ github.ref == 'refs/heads/dev' ||
+      github.ref == 'refs/heads/UAT' }}
     runs-on: self-hosted
     needs: build_artifact
+
     steps:
-      - name: checkout source code
+      - name: Checkout source code
         uses: actions/checkout@v4
-      - name: setting up java
+
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
           cache: maven
+
       - name: Run tests
         run: mvn test
 
   deployment:
+    # Deploy only on main.
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: self-hosted
-    on:
-      push:
-        branches: [main]
-    needs: [build_artifact, test]
+    needs: build_artifact
+
     steps:
       - name: Download WAR artifact
         uses: actions/download-artifact@v4
