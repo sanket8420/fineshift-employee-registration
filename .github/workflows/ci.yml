@@ -8,9 +8,7 @@ on:
       - uat
 
 jobs:
-  build_artifact:
-    # Build on main so deployment has a WAR to deploy.
-    # Also build on dev and UAT.
+  ${{ github.actor }}-build_artifact:
     if: ${{ github.ref == 'refs/heads/main' ||
       github.ref == 'refs/heads/dev' ||
       github.ref == 'refs/heads/uat' }}
