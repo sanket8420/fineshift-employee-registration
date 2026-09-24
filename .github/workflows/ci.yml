@@ -3,8 +3,6 @@ name: Workflow for employee registration project demo
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   build_artifact:
@@ -44,6 +42,9 @@ jobs:
 
   deployment:
     runs-on: self-hosted
+    on:
+      push:
+        branches: [main]
     needs: [build_artifact, test]
     steps:
       - name: Download WAR artifact
