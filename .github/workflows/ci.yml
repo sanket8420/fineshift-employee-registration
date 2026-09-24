@@ -7,8 +7,15 @@ on:
       - dev
       - uat
 
+permissions: 
+    contents: read
+    packages: write
+
+  
+  
+
 jobs:
-  ${{ github.actor }}-build_artifact:
+  build_artifact:
     if: ${{ github.ref == 'refs/heads/main' ||
       github.ref == 'refs/heads/dev' ||
       github.ref == 'refs/heads/uat' }}
