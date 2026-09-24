@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - dev
-      - UAT
+      - uat
 
 jobs:
   build_artifact:
@@ -13,7 +13,7 @@ jobs:
     # Also build on dev and UAT.
     if: ${{ github.ref == 'refs/heads/main' ||
       github.ref == 'refs/heads/dev' ||
-      github.ref == 'refs/heads/UAT' }}
+      github.ref == 'refs/heads/uat' }}
     runs-on: self-hosted
 
     steps:
@@ -40,7 +40,7 @@ jobs:
   test:
     # Run tests only on dev and UAT.
     if: ${{ github.ref == 'refs/heads/dev' ||
-      github.ref == 'refs/heads/UAT' }}
+      github.ref == 'refs/heads/uat' }}
     runs-on: self-hosted
     needs: build_artifact
 
